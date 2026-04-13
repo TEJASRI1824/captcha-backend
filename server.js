@@ -7,17 +7,24 @@ app.use(cors());
 
 let users = [];
 
+// REGISTER
 app.post("/register", (req, res) => {
     const { email, password } = req.body;
 
     let user = users.find(u => u.email === email);
     if (user) return res.json({ message: "User exists" });
 
-    users.push({ email, password, earnings: 0, tasks: 0 });
+    users.push({
+        email,
+        password,
+        earnings: 0,
+        tasks: 0
+    });
 
     res.json({ message: "Registered" });
 });
 
+// LOGIN
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
 
@@ -27,6 +34,7 @@ app.post("/login", (req, res) => {
     res.json({ message: "Success" });
 });
 
+// UPDATE CAPTCHA
 app.post("/update", (req, res) => {
     const { email, correct } = req.body;
 
@@ -39,6 +47,7 @@ app.post("/update", (req, res) => {
     res.json(user);
 });
 
+// GET USERS
 app.get("/users", (req, res) => {
     res.json(users);
 });
