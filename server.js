@@ -1,70 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Admin Panel</title>
+const express = require("express");
+const cors = require("cors");
 
-<style>
-body {
-    font-family: Arial;
-    background:#0f172a;
-    color:white;
-    padding:20px;
-}
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-table {
-    width:100%;
-    border-collapse: collapse;
-    margin-top:20px;
-}
+let users = [];
 
-th, td {
-    padding:10px;
-    border:1px solid #1e293b;
-}
+app.post("/register", (req, res) => {
+    const { email, password } = req.body;
 
-th {
-    background:#1e293b;
-}
-</style>
+    let user = users.find(u => u.email === email);
+    if (user) return res.json({ message: "User exists" });
 
-</head>
-<body>
+    users.push({ email, password, earnings: 0, tasks: 0 });
 
-<h1>Admin Dashboard</h1>
+    res.json({ message: "Registered" });
+});
 
-<table>
-    <thead>
-        <tr>
-            <th>Email</th>
-            <th>Earnings</th>
-            <th>Tasks</th>
-        </tr>
-    </thead>
-    <tbody id="userTable"></tbody>
-</table>
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
 
-<script>
-async function loadUsers() {
-    let res = await fetch("http://localhost:5000/users");
-    let data = await res.json();
+    let user = users.find(u => u.email === email && u.password === password);
+    if (!user) return res.json({ message: "Invalid" });
 
-    let html = "";
+    res.json({ message: "Success" });
+});
 
-    data.forEach(user => {
-        html += `
-        <tr>
-            <td>${user.email}</td>
-            <td>₹${user.earnings}</td>
-            <td>${user.tasks}</td>
-        </tr>
-        `;
-    });
+app.post("/update", (req, res) => {
+    const { email, correct } = req.body;
 
-    document.getElementById("userTable").innerHTML = html;
-}
+    let user = users.find(u => u.email === email);
+    if (!user) return res.json({ message: "Not found" });
 
-loadUsers();
-</script>
+    user.tasks++;
+    if (correct) user.earnings++;
 
-</body>
-</html>
+    res.json(user);
+});
+
+app.get("/users", (req, res) => {
+    res.json(users);
+});
+
+app.listen(5000, () => console.log("Server running on port 5000"));
