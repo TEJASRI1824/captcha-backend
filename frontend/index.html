@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SkillRich Clone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:#020a2b;
+    color:white;
+}
+
+/* NAVBAR */
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 50px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+}
+
+.menu a{
+    margin:0 15px;
+    text-decoration:none;
+    color:white;
+}
+
+.btn{
+    padding:10px 20px;
+    background:linear-gradient(to right,#2b6cb0,#f97316);
+    border-radius:20px;
+}
+
+/* HERO */
+.hero{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:60px;
+}
+
+.hero-text{
+    max-width:500px;
+}
+
+.hero-text h1{
+    font-size:48px;
+    line-height:1.2;
+}
+
+.hero-text span{
+    color:#f97316;
+}
+
+.hero-text p{
+    margin:20px 0;
+}
+
+.hero-img img{
+    width:400px;
+}
+
+/* BUTTON */
+.cta{
+    padding:12px 25px;
+    background:linear-gradient(to right,#2b6cb0,#f97316);
+    border:none;
+    border-radius:25px;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+    <div class="logo">SkillRich</div>
+
+    <div class="menu">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Courses</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <div class="btn">Login</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+
+    <div class="hero-text">
+        <h1>Transform Your Future <br> with <span>SkillRich</span></h1>
+
+        <p>Access world-class courses and grow your career with expert guidance.</p>
+
+        <button class="cta" onclick="goLogin()">Get Started →</button>
+    </div>
+
+    <div class="hero-img">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png">
+    </div>
+
+</div>
+
+<script>
+function goLogin(){
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
