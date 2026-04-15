@@ -3,23 +3,18 @@ const cors = require("cors");
 
 const app = express();
 
-// VERY IMPORTANT
+// IMPORTANT
 app.use(express.json());
 app.use(cors());
 
-// DATA
 let courses = [
   {
     title: "Affiliate Marketing",
     video: "https://www.w3schools.com/html/mov_bbb.mp4"
-  },
-  {
-    title: "Canva Mastery",
-    video: "https://www.w3schools.com/html/movie.mp4"
   }
 ];
 
-// TEST
+// TEST ROUTE
 app.get("/", (req, res) => {
   res.send("Backend working");
 });
@@ -29,10 +24,8 @@ app.get("/courses", (req, res) => {
   res.json(courses);
 });
 
-// POST COURSE (FIXED)
+// POST COURSES (THIS FIXES YOUR ERROR)
 app.post("/courses", (req, res) => {
-  console.log("Incoming:", req.body);
-
   const { title, video } = req.body;
 
   if (!title || !video) {
@@ -41,7 +34,7 @@ app.post("/courses", (req, res) => {
 
   courses.push({ title, video });
 
-  res.json({ message: "Course added successfully" });
+  res.json({ message: "Added successfully" });
 });
 
 const PORT = process.env.PORT || 5000;
