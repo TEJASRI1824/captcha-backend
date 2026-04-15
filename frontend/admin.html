@@ -19,6 +19,7 @@ button{
     padding:10px;
     background:orange;
     border:none;
+    cursor:pointer;
 }
 </style>
 </head>
@@ -32,19 +33,41 @@ button{
 
 <button onclick="addCourse()">Add Course</button>
 
+<p id="msg"></p>
+
 <script>
+
 function addCourse(){
+
+    let title = document.getElementById("title").value;
+    let video = document.getElementById("video").value;
+
+    if(!title || !video){
+        alert("Please fill all fields");
+        return;
+    }
+
     fetch("https://captcha-backend-uiar.onrender.com/courses",{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            title:document.getElementById("title").value,
-            video:document.getElementById("video").value
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            title:title,
+            video:video
         })
     })
-    .then(res=>res.json())
-    .then(data=>alert("Course Added"));
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("msg").innerText = "Course Added Successfully ✅";
+        console.log(data);
+    })
+    .catch(err => {
+        console.log(err);
+        alert("Error adding course ❌");
+    });
 }
+
 </script>
 
 </body>
