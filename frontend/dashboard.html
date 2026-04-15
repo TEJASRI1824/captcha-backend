@@ -2,7 +2,6 @@
 <html>
 <head>
 <title>SkillRich Dashboard</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
@@ -57,17 +56,8 @@ body{
     border-radius:10px;
 }
 
-input{
-    padding:10px;
-    width:250px;
-    margin:10px 0;
-}
-
-button{
-    padding:10px;
-    background:orange;
-    border:none;
-    cursor:pointer;
+video{
+    width:100%;
 }
 </style>
 </head>
@@ -99,25 +89,35 @@ button{
 <!-- PROFILE -->
 <div id="profile" class="section" style="display:none;">
     <h3>Profile</h3>
-    <input placeholder="Name">
+    <input placeholder="Name"><br><br>
     <input placeholder="Email">
 </div>
 
 <!-- BANK -->
 <div id="bank" class="section" style="display:none;">
     <h3>Bank Details</h3>
-    <input placeholder="Account Number">
+    <input placeholder="Account"><br><br>
     <input placeholder="IFSC">
 </div>
 
 <!-- KYC -->
 <div id="kyc" class="section" style="display:none;">
     <h3>KYC</h3>
-    <input placeholder="Aadhaar">
+    <input placeholder="Aadhaar"><br><br>
     <input placeholder="PAN">
 </div>
 
 </div>
+
+<script>
+
+// CHECK LOGIN
+if(!localStorage.getItem("user")){
+    alert("Please login first");
+    window.location="login.html";
+}
+
+</script>
 
 <script>
 
@@ -133,11 +133,13 @@ function showSection(id){
     document.getElementById("title").innerText=id.toUpperCase();
 }
 
-// LOAD COURSES FROM YOUR LIVE BACKEND
+// LOAD COURSES FROM YOUR BACKEND
 fetch("https://captcha-backend-uiar.onrender.com/courses")
 .then(res=>res.json())
 .then(data=>{
     let container=document.getElementById("courses");
+
+    container.innerHTML="";
 
     data.forEach(course=>{
         let div=document.createElement("div");
@@ -145,7 +147,7 @@ fetch("https://captcha-backend-uiar.onrender.com/courses")
 
         div.innerHTML=`
             <h3>${course.title}</h3>
-            <video width="100%" controls>
+            <video controls>
                 <source src="${course.video}">
             </video>
         `;
@@ -155,6 +157,15 @@ fetch("https://captcha-backend-uiar.onrender.com/courses")
 })
 .catch(err=>console.log(err));
 
+</script>
+
+<button onclick="logout()">Logout</button>
+
+<script>
+function logout(){
+    localStorage.removeItem("user");
+    window.location="login.html";
+}
 </script>
 
 </body>

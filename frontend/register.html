@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,24 +41,44 @@ button{
 <input id="email" placeholder="Email">
 <input id="password" placeholder="Password">
 
-<button onclick="register()">Register</button>
+<button onclick="registerUser()">Register</button>
 
 <p>Already have account? <a href="login.html" style="color:orange;">Login</a></p>
 </div>
 
 <script>
-function register(){
+
+function registerUser(){
+
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    if(!email || !password){
+        alert("Fill all fields");
+        return;
+    }
+
     fetch("https://captcha-backend-uiar.onrender.com/register",{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{
+            "Content-Type":"application/json"
+        },
         body:JSON.stringify({
-            email:document.getElementById("email").value,
-            password:document.getElementById("password").value
+            email:email,
+            password:password
         })
     })
     .then(res=>res.json())
-    .then(data=>alert(data.message));
+    .then(data=>{
+        alert(data.message);
+        console.log(data);
+    })
+    .catch(err=>{
+        console.log(err);
+        alert("Error connecting to server");
+    });
 }
+
 </script>
 
 </body>

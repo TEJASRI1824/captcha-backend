@@ -1,70 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
+<title>SkillRich Dashboard</title>
+
 <style>
 body{
+    margin:0;
     font-family:Arial;
+    display:flex;
     background:#0b0f2f;
     color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
 }
-.box{
+
+/* SIDEBAR */
+.sidebar{
+    width:220px;
+    background:#020a2b;
+    padding:20px;
+}
+
+.sidebar h2{
+    color:orange;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding:0;
+}
+
+.sidebar li{
+    padding:12px;
+    cursor:pointer;
+}
+
+.sidebar li:hover{
     background:#111a4a;
-    padding:30px;
+}
+
+/* MAIN */
+.main{
+    flex:1;
+    padding:20px;
+}
+
+/* CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#111a4a;
+    padding:15px;
     border-radius:10px;
 }
-input{
-    display:block;
-    margin:10px 0;
-    padding:10px;
-    width:250px;
-}
-button{
-    padding:10px;
-    background:orange;
-    border:none;
-    cursor:pointer;
+
+video{
+    width:100%;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-<h2>Login</h2>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>SkillRich</h2>
 
-<input id="email" placeholder="Email">
-<input id="password" placeholder="Password">
+    <ul>
+        <li onclick="showSection('dashboard')">Dashboard</li>
+        <li onclick="showSection('profile')">Profile</li>
+        <li onclick="showSection('bank')">Bank</li>
+        <li onclick="showSection('kyc')">KYC</li>
+    </ul>
+</div>
 
-<button onclick="login()">Login</button>
+<!-- MAIN -->
+<div class="main">
 
-<p>New user? <a href="register.html" style="color:orange;">Register</a></p>
+<h2 id="title">Dashboard</h2>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="section">
+    <div class="cards" id="courses"></div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="section" style="display:none;">
+    <h3>Profile</h3>
+    <input placeholder="Name"><br><br>
+    <input placeholder="Email">
+</div>
+
+<!-- BANK -->
+<div id="bank" class="section" style="display:none;">
+    <h3>Bank Details</h3>
+    <input placeholder="Account"><br><br>
+    <input placeholder="IFSC">
+</div>
+
+<!-- KYC -->
+<div id="kyc" class="section" style="display:none;">
+    <h3>KYC</h3>
+    <input placeholder="Aadhaar"><br><br>
+    <input placeholder="PAN">
+</div>
+
 </div>
 
 <script>
-function login(){
-    fetch("https://captcha-backend-uiar.onrender.com/login",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            email:document.getElementById("email").value,
-            password:document.getElementById("password").value
-        })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        alert(data.message);
 
-        if(data.message==="Success"){
-            localStorage.setItem("user",document.getElementById("email").value);
-            window.location="dashboard.html";
-        }
-    });
+// SWITCH SECTIONS
+function showSection(id){
+    let sections = document.getElementsByClassName("section");
+
+    for(let i=0;i<sections.length;i++){
+        sections[i].style.display="none";
+    }
+
+    document.getElementById(id).style.display="block";
+    document.getElementById("title").innerText=id.toUpperCase();
 }
+
+// LOAD COURSES FROM YOUR BACKEND
+fetch("https://captcha-backend-uiar.onrender.com/courses")
+.then(res=>res.json())
+.then(data=>{
+    let container=document.getElementById("courses");
+
+    container.innerHTML="";
+
+    data.forEach(course=>{
+        let div=document.createElement("div");
+        div.className="card";
+
+        div.innerHTML=`
+            <h3>${course.title}</h3>
+            <video controls>
+                <source src="${course.video}">
+            </video>
+        `;
+
+        container.appendChild(div);
+    });
+})
+.catch(err=>console.log(err));
+
 </script>
 
 </body>
