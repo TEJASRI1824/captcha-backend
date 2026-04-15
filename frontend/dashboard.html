@@ -2,25 +2,31 @@
 <html>
 <head>
 <title>SkillRich Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
     margin:0;
-    display:flex;
     font-family:Arial;
+    display:flex;
+    background:#0b0f2f;
+    color:white;
 }
 
 /* SIDEBAR */
 .sidebar{
     width:220px;
     background:#020a2b;
-    color:white;
-    height:100vh;
     padding:20px;
 }
 
 .sidebar h2{
-    margin-bottom:30px;
+    color:orange;
+}
+
+.sidebar ul{
+    list-style:none;
+    padding:0;
 }
 
 .sidebar li{
@@ -36,29 +42,21 @@ body{
 .main{
     flex:1;
     padding:20px;
-    background:#f5f6fa;
-}
-
-.top{
-    display:flex;
-    justify-content:space-between;
 }
 
 /* CARDS */
 .cards{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
     gap:20px;
 }
 
 .card{
-    background:white;
-    padding:10px;
+    background:#111a4a;
+    padding:15px;
     border-radius:10px;
-    box-shadow:0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* INPUT */
 input{
     padding:10px;
     width:250px;
@@ -66,17 +64,17 @@ input{
 }
 
 button{
-    padding:10px 20px;
+    padding:10px;
     background:orange;
     border:none;
     cursor:pointer;
 }
 </style>
-
 </head>
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
     <h2>SkillRich</h2>
 
@@ -88,11 +86,10 @@ button{
     </ul>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
-<div class="top">
-    <h2 id="title">Dashboard</h2>
-</div>
+<h2 id="title">Dashboard</h2>
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="section">
@@ -101,39 +98,30 @@ button{
 
 <!-- PROFILE -->
 <div id="profile" class="section" style="display:none;">
-    <h3>My Profile</h3>
-
-    <input id="name" placeholder="Name">
-    <input id="email" placeholder="Email">
-
-    <button onclick="saveProfile()">Save</button>
+    <h3>Profile</h3>
+    <input placeholder="Name">
+    <input placeholder="Email">
 </div>
 
 <!-- BANK -->
 <div id="bank" class="section" style="display:none;">
     <h3>Bank Details</h3>
-
-    <input id="acc" placeholder="Account Number">
-    <input id="ifsc" placeholder="IFSC Code">
-
-    <button onclick="saveBank()">Save</button>
+    <input placeholder="Account Number">
+    <input placeholder="IFSC">
 </div>
 
 <!-- KYC -->
 <div id="kyc" class="section" style="display:none;">
-    <h3>KYC Details</h3>
-
-    <input id="aadhaar" placeholder="Aadhaar">
-    <input id="pan" placeholder="PAN">
-
-    <button onclick="saveKYC()">Save</button>
+    <h3>KYC</h3>
+    <input placeholder="Aadhaar">
+    <input placeholder="PAN">
 </div>
 
 </div>
 
 <script>
 
-// ===== SWITCH SECTIONS =====
+// SWITCH SECTIONS
 function showSection(id){
     let sections = document.getElementsByClassName("section");
 
@@ -143,75 +131,29 @@ function showSection(id){
 
     document.getElementById(id).style.display="block";
     document.getElementById("title").innerText=id.toUpperCase();
-
-    if(id==="profile") loadProfile();
 }
 
-
-// ===== LOAD COURSES =====
-fetch("http://localhost:5000/courses")
+// LOAD COURSES FROM YOUR LIVE BACKEND
+fetch("https://captcha-backend-uiar.onrender.com/courses")
 .then(res=>res.json())
 .then(data=>{
-    let c=document.getElementById("courses");
+    let container=document.getElementById("courses");
 
     data.forEach(course=>{
-        c.innerHTML+=`
-        <div class="card">
+        let div=document.createElement("div");
+        div.className="card";
+
+        div.innerHTML=`
             <h3>${course.title}</h3>
             <video width="100%" controls>
                 <source src="${course.video}">
             </video>
-        </div>`;
+        `;
+
+        container.appendChild(div);
     });
-});
-
-
-// ===== SAVE PROFILE (BACKEND) =====
-function saveProfile(){
-    let name=document.getElementById("name").value;
-    let email=document.getElementById("email").value;
-
-    fetch("http://localhost:5000/save-profile",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({name,email})
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        alert(data.message);
-
-        localStorage.setItem("name",name);
-        localStorage.setItem("email",email);
-    });
-}
-
-
-// ===== AUTO LOAD PROFILE =====
-function loadProfile(){
-    document.getElementById("name").value=localStorage.getItem("name")||"";
-    document.getElementById("email").value=localStorage.getItem("email")||"";
-}
-
-
-// ===== BANK =====
-function saveBank(){
-    alert("Bank Saved");
-}
-
-
-// ===== KYC =====
-function saveKYC(){
-    fetch("http://localhost:5000/kyc",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            aadhaar:document.getElementById("aadhaar").value,
-            pan:document.getElementById("pan").value
-        })
-    })
-    .then(res=>res.json())
-    .then(data=>alert(data.message));
-}
+})
+.catch(err=>console.log(err));
 
 </script>
 

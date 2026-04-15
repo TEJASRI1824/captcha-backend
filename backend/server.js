@@ -27,6 +27,11 @@ app.get("/courses", (req, res) => {
   res.json(courses);
 });
 
+app.post("/courses", (req, res) => {
+    courses.push(req.body);
+    res.json({message:"Course added"});
+});
+
 // PORT
 const PORT = process.env.PORT || 5000;
 

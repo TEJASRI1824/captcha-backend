@@ -1,17 +1,53 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>Login</title>
+<style>
+body{
+    font-family:Arial;
+    background:#0b0f2f;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.box{
+    background:#111a4a;
+    padding:30px;
+    border-radius:10px;
+}
+input{
+    display:block;
+    margin:10px 0;
+    padding:10px;
+    width:250px;
+}
+button{
+    padding:10px;
+    background:orange;
+    border:none;
+    cursor:pointer;
+}
+</style>
+</head>
+
 <body>
 
+<div class="box">
 <h2>Login</h2>
 
-<input id="email" placeholder="Email"><br><br>
-<input id="password" placeholder="Password"><br><br>
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Password">
 
 <button onclick="login()">Login</button>
 
+<p>New user? <a href="register.html" style="color:orange;">Register</a></p>
+</div>
+
 <script>
 function login(){
-    fetch("http://localhost:5000/login",{
+    fetch("https://captcha-backend-uiar.onrender.com/login",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
@@ -23,7 +59,8 @@ function login(){
     .then(data=>{
         alert(data.message);
 
-        if(data.message==="Login success"){
+        if(data.message==="Success"){
+            localStorage.setItem("user",document.getElementById("email").value);
             window.location="dashboard.html";
         }
     });

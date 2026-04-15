@@ -1,34 +1,50 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>Admin Panel</title>
+<style>
+body{
+    font-family:Arial;
+    background:#0b0f2f;
+    color:white;
+    padding:30px;
+}
+input{
+    display:block;
+    margin:10px 0;
+    padding:10px;
+    width:300px;
+}
+button{
+    padding:10px;
+    background:orange;
+    border:none;
+}
+</style>
+</head>
+
 <body>
 
-<h2>Admin - KYC Requests</h2>
+<h2>Admin - Add Course</h2>
 
-<div id="list"></div>
+<input id="title" placeholder="Course Title">
+<input id="video" placeholder="Video URL">
+
+<button onclick="addCourse()">Add Course</button>
 
 <script>
-
-fetch("http://localhost:5000/kyc-list")
-.then(res=>res.json())
-.then(data=>{
-    let div=document.getElementById("list");
-
-    data.forEach(user=>{
-        div.innerHTML+=`
-        <p>${user.aadhaar} - ${user.pan}
-        <button onclick="approve()">Approve</button></p>
-        `;
-    });
-});
-
-function approve(){
-    fetch("http://localhost:5000/approve-kyc",{
-        method:"POST"
+function addCourse(){
+    fetch("https://captcha-backend-uiar.onrender.com/courses",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            title:document.getElementById("title").value,
+            video:document.getElementById("video").value
+        })
     })
     .then(res=>res.json())
-    .then(data=>alert(data.message));
+    .then(data=>alert("Course Added"));
 }
-
 </script>
 
 </body>
