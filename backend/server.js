@@ -3,10 +3,11 @@ const cors = require("cors");
 
 const app = express();
 
+// VERY IMPORTANT
 app.use(express.json());
 app.use(cors());
 
-// COURSES
+// DATA
 let courses = [
   {
     title: "Affiliate Marketing",
@@ -18,21 +19,31 @@ let courses = [
   }
 ];
 
-// ROUTES
+// TEST
 app.get("/", (req, res) => {
-  res.send("Backend running");
+  res.send("Backend working");
 });
 
+// GET COURSES
 app.get("/courses", (req, res) => {
   res.json(courses);
 });
 
+// POST COURSE (FIXED)
 app.post("/courses", (req, res) => {
-    courses.push(req.body);
-    res.json({message:"Course added"});
+  console.log("Incoming:", req.body);
+
+  const { title, video } = req.body;
+
+  if (!title || !video) {
+    return res.status(400).json({ message: "Missing data" });
+  }
+
+  courses.push({ title, video });
+
+  res.json({ message: "Course added successfully" });
 });
 
-// PORT
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
