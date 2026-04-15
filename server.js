@@ -2,54 +2,34 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
+
 app.use(express.json());
 app.use(cors());
 
-let users = [];
+// COURSES
+let courses = [
+  {
+    title: "Affiliate Marketing",
+    video: "https://www.w3schools.com/html/mov_bbb.mp4"
+  },
+  {
+    title: "Canva Mastery",
+    video: "https://www.w3schools.com/html/movie.mp4"
+  }
+];
 
-// REGISTER
-app.post("/register", (req, res) => {
-    const { email, password } = req.body;
-
-    let user = users.find(u => u.email === email);
-    if (user) return res.json({ message: "User exists" });
-
-    users.push({
-        email,
-        password,
-        earnings: 0,
-        tasks: 0
-    });
-
-    res.json({ message: "Registered" });
+// ROUTES
+app.get("/", (req, res) => {
+  res.send("Backend running");
 });
 
-// LOGIN
-app.post("/login", (req, res) => {
-    const { email, password } = req.body;
-
-    let user = users.find(u => u.email === email && u.password === password);
-    if (!user) return res.json({ message: "Invalid" });
-
-    res.json({ message: "Success" });
+app.get("/courses", (req, res) => {
+  res.json(courses);
 });
 
-// UPDATE CAPTCHA
-app.post("/update", (req, res) => {
-    const { email, correct } = req.body;
+// PORT
+const PORT = process.env.PORT || 5000;
 
-    let user = users.find(u => u.email === email);
-    if (!user) return res.json({ message: "Not found" });
-
-    user.tasks++;
-    if (correct) user.earnings++;
-
-    res.json(user);
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
-
-// GET USERS
-app.get("/users", (req, res) => {
-    res.json(users);
-});
-
-app.listen(5000, () => console.log("Server running on port 5000"));
